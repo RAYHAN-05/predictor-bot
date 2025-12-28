@@ -2,30 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RS_TEAM - STYLISH AUTO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RS_RAYHAN VIP AUTO</title>
     <style>
         :root { --red: #ff003c; --cyan: #00f3ff; }
-        body { background: #000; color: #fff; font-family: 'Courier New', monospace; text-align: center; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .app-card { width: 90%; max-width: 400px; padding: 25px; border: 2px solid var(--red); border-radius: 20px; box-shadow: 0 0 25px var(--red); background: rgba(0,0,0,0.9); }
-        .timer { font-size: 50px; font-weight: bold; color: var(--cyan); margin: 15px 0; }
-        .period-box { font-size: 16px; background: rgba(255,0,60,0.1); padding: 10px; border-radius: 10px; border: 1px dashed var(--red); margin-bottom: 20px; }
-        .prediction-box { width: 160px; height: 160px; border: 4px double var(--red); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px auto; transition: 0.5s; }
-        #resultText { font-size: 32px; font-weight: bold; }
+        body { background: #000; color: #fff; font-family: 'Courier New', monospace; text-align: center; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        .app-card { width: 90%; max-width: 400px; padding: 30px; border: 2px solid var(--red); border-radius: 20px; box-shadow: 0 0 30px var(--red); background: rgba(0,0,0,0.95); }
+        .timer { font-size: 60px; font-weight: bold; color: var(--cyan); text-shadow: 0 0 15px var(--cyan); margin: 20px 0; }
+        .period-box { font-size: 16px; background: rgba(255,0,60,0.1); padding: 12px; border-radius: 10px; border: 1px dashed var(--red); margin-bottom: 25px; }
+        .prediction-box { width: 180px; height: 180px; border: 5px double var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; transition: 0.5s; box-shadow: 0 0 15px var(--red); }
+        #resultText { font-size: 35px; font-weight: bold; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
     <div class="app-card">
-        <h2 style="color: var(--red); letter-spacing: 2px;">RS_RAYHAN VIP</h2>
-        <div class="timer" id="timerDisplay">00:00</div>
+        <h2 style="color: var(--red); letter-spacing: 3px; margin: 0;">𝑹𝑺_𝑹𝑨𝒀𝑯𝑨𝑵 𝑽𝑰𝑷</h2>
+        <div class="timer" id="timerDisplay">00:30</div>
+        
         <div class="period-box">
-            <span style="color: #aaa;">PERIOD:</span> <span id="periodText" style="color: var(--cyan);">---</span>
+            <span style="color: #aaa; font-size: 12px;">LIVE PERIOD</span><br>
+            <span id="periodText" style="color: var(--cyan); font-weight: bold;">LOADING...</span>
         </div>
+
         <div class="prediction-box" id="displayBox">
             <div id="resultText">WAIT</div>
         </div>
-        <p style="font-size: 10px; opacity: 0.5; margin-top: 15px;">24/7 AUTOMATED SYSTEM</p>
+        
+        <p style="font-size: 11px; color: #555; margin-top: 20px;">AUTOMATED SIGNAL SYSTEM</p>
     </div>
 
     <script>
@@ -39,6 +43,7 @@
             const m = String(now.getUTCMonth() + 1).padStart(2, '0');
             const d = String(now.getUTCDate()).padStart(2, '0');
             const dateStr = `${y}${m}${d}`;
+
             const secondsInDay = (now.getUTCHours() * 3600) + (now.getUTCMinutes() * 60) + now.getUTCSeconds();
             const slot = Math.floor(secondsInDay / 30) + 1; 
             const currentPeriod = `${dateStr}1000${String(slot).padStart(5, '0')}`;
@@ -47,7 +52,8 @@
             const remaining = 30 - (now.getUTCSeconds() % 30);
             document.getElementById('timerDisplay').innerText = `00:${remaining.toString().padStart(2, '0')}`;
 
-            if (remaining === 27 && currentPeriod !== lastProcessedPeriod) {
+            // পিরিয়ড শুরুর সাথে সাথে সিগন্যাল জেনারেট
+            if (remaining >= 27 && currentPeriod !== lastProcessedPeriod) {
                 generatePrediction(currentPeriod);
                 lastProcessedPeriod = currentPeriod;
             }
@@ -58,15 +64,15 @@
             const num = isBig ? Math.floor(Math.random()*5)+5 : Math.floor(Math.random()*5);
             const result = isBig ? "BIG" : "SMALL";
 
-            document.getElementById('resultText').innerText = `${result} ${num}`;
+            document.getElementById('resultText').innerText = result;
             document.getElementById('displayBox').style.borderColor = isBig ? "var(--red)" : "var(--cyan)";
+            document.getElementById('displayBox').style.boxShadow = `0 0 25px ${isBig ? "var(--red)" : "var(--cyan)"}`;
             
             sendToTelegram(period, result, num);
-            announcePrediction(result);
+            announceVoice(result);
         }
 
         function sendToTelegram(period, res, num) {
-            // স্টাইলিশ মেসেজ ফরম্যাট
             const message = `🚀 *𝑹𝑺_𝑹𝑨𝒀𝑯𝑨𝑵 𝑽𝑰𝑷 𝑺𝑰𝑮𝑵𝑨𝑳* 🤖%0A` +
                             `━━━━━━━━━━━━━━━━━━━━%0A` +
                             `💎 *𝑴𝑨𝑹𝑲𝑬𝑻:* \`WINGO 30S\`%0A` +
@@ -80,9 +86,9 @@
             fetch(url);
         }
 
-        function announcePrediction(res) {
+        function announceVoice(res) {
             if ('speechSynthesis' in window) {
-                const speech = new SpeechSynthesisUtterance("Next result " + res);
+                const speech = new SpeechSynthesisUtterance("Next result is " + res);
                 window.speechSynthesis.cancel();
                 window.speechSynthesis.speak(speech);
             }
