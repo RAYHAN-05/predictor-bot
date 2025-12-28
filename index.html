@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RS_TEAM - PRO AUTO</title>
+    <title>RS_TEAM - STYLISH AUTO</title>
     <style>
         :root { --red: #ff003c; --cyan: #00f3ff; }
         body { background: #000; color: #fff; font-family: 'Courier New', monospace; text-align: center; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
@@ -11,87 +11,81 @@
         .timer { font-size: 50px; font-weight: bold; color: var(--cyan); margin: 15px 0; }
         .period-box { font-size: 16px; background: rgba(255,0,60,0.1); padding: 10px; border-radius: 10px; border: 1px dashed var(--red); margin-bottom: 20px; }
         .prediction-box { width: 160px; height: 160px; border: 4px double var(--red); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px auto; transition: 0.5s; }
-        #resultText { font-size: 30px; font-weight: bold; }
-        .status { font-size: 12px; color: #ffcc00; margin-top: 10px; background: #111; padding: 8px; border-radius: 5px; border: 1px solid #333; }
+        #resultText { font-size: 32px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="app-card">
-        <h2 style="color: var(--red);">RS_RAYHAN</h2>
+        <h2 style="color: var(--red); letter-spacing: 2px;">RS_RAYHAN VIP</h2>
         <div class="timer" id="timerDisplay">00:00</div>
-        <div class="period-box">LIVE PERIOD: <span id="periodText" style="color: var(--cyan);">---</span></div>
+        <div class="period-box">
+            <span style="color: #aaa;">PERIOD:</span> <span id="periodText" style="color: var(--cyan);">---</span>
+        </div>
         <div class="prediction-box" id="displayBox">
             <div id="resultText">WAIT</div>
-            <div style="font-size: 12px;" id="accuracyText">ANALYZING</div>
         </div>
-        <div class="status" id="systemStatus">SYSTEM READY ✅</div>
+        <p style="font-size: 10px; opacity: 0.5; margin-top: 15px;">24/7 AUTOMATED SYSTEM</p>
     </div>
 
     <script>
-        // ======= ফিক্সড কনফিগারেশন =======
         const BOT_TOKEN = '8564357681:AAHERKPgVWgxf9ecRKQrMqeIHmJnn6IBX0c'; 
-        const CHAT_ID = '-1003330727212'; // আপনার চ্যানেলের ফিক্সড আইডি
+        const CHAT_ID = '-1002396116905'; 
         let lastProcessedPeriod = "";
 
         function updateClock() {
             const now = new Date();
-            
-            // অফিশিয়াল পিরিয়ড ফরম্যাট জেনারেশন
             const y = now.getUTCFullYear();
             const m = String(now.getUTCMonth() + 1).padStart(2, '0');
             const d = String(now.getUTCDate()).padStart(2, '0');
             const dateStr = `${y}${m}${d}`;
-
             const secondsInDay = (now.getUTCHours() * 3600) + (now.getUTCMinutes() * 60) + now.getUTCSeconds();
             const slot = Math.floor(secondsInDay / 30) + 1; 
             const currentPeriod = `${dateStr}1000${String(slot).padStart(5, '0')}`;
             
             document.getElementById('periodText').innerText = currentPeriod;
-            
             const remaining = 30 - (now.getUTCSeconds() % 30);
             document.getElementById('timerDisplay').innerText = `00:${remaining.toString().padStart(2, '0')}`;
 
-            // নতুন পিরিয়ড শুরু হওয়ার ঠিক পর সিগন্যাল যাবে
             if (remaining === 27 && currentPeriod !== lastProcessedPeriod) {
                 generatePrediction(currentPeriod);
                 lastProcessedPeriod = currentPeriod;
             }
         }
 
-        async function generatePrediction(period) {
+        function generatePrediction(period) {
             const isBig = Math.random() > 0.5;
             const num = isBig ? Math.floor(Math.random()*5)+5 : Math.floor(Math.random()*5);
             const result = isBig ? "BIG" : "SMALL";
-            const accuracy = Math.floor(Math.random() * 10) + 88;
 
             document.getElementById('resultText').innerText = `${result} ${num}`;
-            document.getElementById('accuracyText').innerText = `ACCURACY: ${accuracy}%`;
             document.getElementById('displayBox').style.borderColor = isBig ? "var(--red)" : "var(--cyan)";
             
-            sendToTelegram(period, result, num, accuracy);
+            sendToTelegram(period, result, num);
+            announcePrediction(result);
         }
 
-        function sendToTelegram(period, res, num, acc) {
-            const message = `🎯 *RS_RAYHAN VIP SIGNAL* 🤖%0A%0A` +
-                            `📅 *Period:* \`${period}\` %0A` +
-                            `🔮 *Result:* *${res} (${num})*%0A` +
-                            `🔥 *Accuracy:* ${acc}%0A` +
-                            `🚀 *Status:* 24/7 AUTO ONLINE`;
+        function sendToTelegram(period, res, num) {
+            // স্টাইলিশ মেসেজ ফরম্যাট
+            const message = `🚀 *𝑹𝑺_𝑹𝑨𝒀𝑯𝑨𝑵 𝑽𝑰𝑷 𝑺𝑰𝑮𝑵𝑨𝑳* 🤖%0A` +
+                            `━━━━━━━━━━━━━━━━━━━━%0A` +
+                            `💎 *𝑴𝑨𝑹𝑲𝑬𝑻:* \`WINGO 30S\`%0A` +
+                            `📅 *𝑷𝑬𝑹𝑰𝑶𝑫:* \`${period}\` %0A%0A` +
+                            `🔮 *𝑷𝑹𝑬𝑫𝑰𝑪𝑻𝑰𝑶𝑵:* *${res} (${num})*%0A` +
+                            `⚠️ *𝑨𝑫𝑽𝑰𝑪𝑬:* \`Use 7 Level Martingale\`%0A` +
+                            `━━━━━━━━━━━━━━━━━━━━%0A` +
+                            `🔥 *𝑺𝑻𝑨𝑻𝑼𝑺:* \`24/7 AUTO ONLINE\``;
 
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${message}&parse_mode=Markdown`;
+            fetch(url);
+        }
 
-            fetch(url)
-            .then(res => {
-                if(res.ok) {
-                    document.getElementById('systemStatus').innerText = "✅ SIGNAL SENT TO TELEGRAM";
-                } else {
-                    document.getElementById('systemStatus').innerText = "❌ API ERROR: MAKE BOT ADMIN";
-                }
-            })
-            .catch(() => {
-                document.getElementById('systemStatus').innerText = "⚠️ CONNECTION FAILED";
-            });
+        function announcePrediction(res) {
+            if ('speechSynthesis' in window) {
+                const speech = new SpeechSynthesisUtterance("Next result " + res);
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(speech);
+            }
         }
 
         setInterval(updateClock, 1000);
